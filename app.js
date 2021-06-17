@@ -48,12 +48,13 @@ function addToDO(event) {
 }
 
 function deleteCheck(e) {
-  const item = e.target;
+  const item = e.target;    
   // Delete ToDo
   if (item.classList[0] === "trash-btn") {
     const todo = item.parentElement;
     // Animation
     todo.classList.add("fall");
+    removeLocalTodos(todo);
     todo.addEventListener("transitionend", function () {
       todo.remove();
     });
@@ -78,7 +79,7 @@ function filterTodo(e) {
         if (todo.classList.contains("completed")) {
           todo.style.display = "flex;";
         } else {
-          todo.style.display = "None";
+          todo.style.display = "none";
         }
       case "uncompleted":
         if (!todo.classList.contains("completed")) {
@@ -137,3 +138,16 @@ function getTodos() {
     todoList.appendChild(todoDiv);
   });
 }
+
+// Remore From Localstorage
+function removeLocalTodos(todo){
+  let todos;
+  if(localStorage.getItem("todos")===null){
+    todo=[];
+  }else{
+    todos = JSON.parse(localStorage.getItem("todos"));  
+  }
+  const todoIndex = todo.children[0].innerText;
+  todos.splice(todos.indexOf(todoIndex), 1);
+  localStorage.setItem("todos", JSON.stringify(todos));
+} 
